@@ -1,7 +1,6 @@
 package eu.sig.training.ch02;
 
 public class BoardFactory {
-    // tag::createBoard[]
     public Board createBoard(Square[][] grid) {
         assert grid != null;
 
@@ -23,7 +22,6 @@ public class BoardFactory {
 
         return board;
     }
-    // end::createBoard[]
 }
 
 class Board {
