@@ -2,30 +2,47 @@ package eu.sig.training.ch02;
 
 public class BoardFactory {
     public Board createBoard(Square[][] grid) {
-        assert grid != null;
-
-        Board board = new Board(grid);
-
-        int width = board.getWidth();
-        int height = board.getHeight();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                Square square = grid[x][y];
-                for (Direction dir : Direction.values()) {
-                    int dirX = (width + x + dir.getDeltaX()) % width;
-                    int dirY = (height + y + dir.getDeltaY()) % height;
-                    Square neighbour = grid[dirX][dirY];
-                    square.link(neighbour, dir);
-                }
-            }
-        }
-
-        return board;
+        return new BoardCreator(grid).create();
     }
 }
 
+class BoardCreator {
+	private Square[][] grid;
+	private Board board;
+	private int width;
+	private int height;
+	private int xVar = 0;
+	private int yVar = 0;
+	
+	BoardCreator(Square[][] grid) {
+		assert grid != null;
+		this.grid = grid;
+		this.board = new Board(grid);
+		this.width = board.getWidth();
+		this.height = board.getHeight();
+	}
+	
+	Board create() {
+		for (int x = xVar; x < width; x++) {
+            for (int y = yVar; y < height; y++) {
+                Square square = grid[x][y];
+                for (Direction dir : Direction.values()) {
+                    setLink(square, dir, x, y);
+                }
+            }
+        }
+		return this.board;
+	}
+	
+	private void setLink(Square square, Direction dir, int x, int y) {
+		int dirX = (width + x + dir.getDeltaX()) % width;
+        int dirY = (height + y + dir.getDeltaY()) % height;
+        Square neighbour = grid[dirX][dirY];
+        square.link(neighbour, dir);
+	}
+}
+
 class Board {
-    @SuppressWarnings("unused")
     public Board(Square[][] grid) {}
 
     public int getWidth() {
@@ -38,7 +55,6 @@ class Board {
 }
 
 class Square {
-    @SuppressWarnings("unused")
     public void link(Square neighbour, Direction dir) {}
 }
 
